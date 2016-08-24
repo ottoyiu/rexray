@@ -20,7 +20,7 @@ import:
     repo:    https://github.com/akutz/viper.git
     vcs:     git
   - name:    github.com/aws/aws-sdk-go
-    ref:     aac89266a9bc98ecbf440bb675e9dc95a94d8dc6
+    ref:     41d27747f314ab5d608a470e23f1d92bd5249b0c
     repo:    https://github.com/aws/aws-sdk-go.git
     vcs:     git
   - package: github.com/emccode/goscaleio
