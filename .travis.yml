@@ -6,6 +6,10 @@ go:
   - 1.5.1
 
 addons:
+  artifacts: true
+    s3_region: "us-west-2"
+    paths:
+      - $(git ls-files -o | grep ".build/bin" |  tr "\n" ":")
   apt:
     packages:
     - rpm
@@ -14,41 +18,10 @@ before_script:
   - source .build/dependencies.sh
 
 script:
-  - make build-all rpm-all deb-all deploy-prep
+  - make build-all
 
 notifications:
   - slack: $SLACK_BUILDS
-
-before_deploy:
-  - .build/bintray-decapitate.sh
-
-deploy:
-  - provider: bintray
-    file: .build/bintray-stupid-filtered.json
-    user: $BINTRAY_USER
-    key: $BINTRAY_KEY
-    skip_cleanup: true
-    on:
-      all_branches: true
-      condition: $TRAVIS_TAG =~ ^$ && ($TRAVIS_REPO_SLUG = 'ottoyiu/rexray' || $IGNORE_REPO_SLUG_CONDITION = true) && ($TRAVIS_BRANCH = master || $IGNORE_BRANCH_CONDITION = true)
-
-  - provider: bintray
-    file: .build/bintray-staged-filtered.json
-    user: $BINTRAY_USER
-    key: $BINTRAY_KEY
-    skip_cleanup: true
-    on:
-      all_branches: true
-      condition: $TRAVIS_TAG =~ -rc[[:digit:]]+$ && ($TRAVIS_REPO_SLUG = 'ottoyiu/rexray' || $IGNORE_REPO_SLUG_CONDITION = true)
-
-  - provider: bintray
-    file: .build/bintray-stable-filtered.json
-    user: $BINTRAY_USER
-    key: $BINTRAY_KEY
-    skip_cleanup: true
-    on:
-      all_branches: true
-      condition: $TRAVIS_TAG =~ ^v?[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]$ && ($TRAVIS_REPO_SLUG = 'ottoyiu/rexray' || $IGNORE_REPO_SLUG_CONDITION = true)
 
 cache:
   apt: true
