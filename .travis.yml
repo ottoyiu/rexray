@@ -9,7 +9,7 @@ addons:
   artifacts:
     s3_region: "us-west-2"
     paths:
-      - $(git ls-files -o | grep ".build/bin" |  tr "\n" ":")
+      - .build/bin
   apt:
     packages:
     - rpm
